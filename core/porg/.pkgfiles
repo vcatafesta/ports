@@ -1,0 +1,32 @@
+porg-0.10-1
+drwxr-xr-x root/root    bin/
+-rwxr-xr-x root/root    bin/paco2porg
+-rwxr-xr-x root/root    bin/porg
+-rwxr-xr-x root/root    bin/porgball
+drwxr-xr-x root/root    usr/
+drwxr-xr-x root/root    usr/etc/
+drwxr-xr-x root/root    usr/etc/bash_completion.d/
+-rw-r--r-- root/root    usr/etc/bash_completion.d/porg_bash_completion
+-rw-r--r-- root/root    usr/etc/porgrc
+drwxr-xr-x root/root    usr/lib/
+-rw-r--r-- root/root    usr/lib/libporg-log.a
+lrwxrwxrwx root/root    usr/lib/libporg-log.so -> libporg-log.so.0.0.0
+lrwxrwxrwx root/root    usr/lib/libporg-log.so.0 -> libporg-log.so.0.0.0
+-rwxr-xr-x root/root    usr/lib/libporg-log.so.0.0.0
+drwxr-xr-x root/root    usr/share/
+drwxr-xr-x root/root    usr/share/man/
+drwxr-xr-x root/root    usr/share/man/man5/
+-rw-r--r-- root/root    usr/share/man/man5/porgrc.5.gz
+drwxr-xr-x root/root    usr/share/man/man8/
+-rw-r--r-- root/root    usr/share/man/man8/porg.8.gz
+-rw-r--r-- root/root    usr/share/man/man8/porgball.8.gz
+drwxr-xr-x root/root    usr/share/porg/
+-rw-r--r-- root/root    usr/share/porg/README
+-rw-r--r-- root/root    usr/share/porg/download.png
+-rw-r--r-- root/root    usr/share/porg/faq.txt
+-rw-r--r-- root/root    usr/share/porg/index.html
+-rw-r--r-- root/root    usr/share/porg/porg.png
+-rw-r--r-- root/root    usr/share/porg/porgrc
+drwxr-xr-x root/root    var/
+drwxr-xr-x root/root    var/log/
+drwxr-xr-x root/root    var/log/porg/

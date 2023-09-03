@@ -1,0 +1,19 @@
+# description	: Utility used to store, backup, and transport files
+# depends	: acl
+
+name=porg
+version=0.10
+release=1
+#source="https://ftp.gnu.org/gnu/$name/$name-$version.tar.xz"
+source="https://ufpr.dl.sourceforge.net/project/porg/porg-0.10.tar.gz"
+build() {
+	cd $name-$version
+
+	FORCE_UNSAFE_CONFIGURE=1  \
+	./configure --prefix=/usr \
+	            --bindir=/bin \
+			    --disable-grop
+	make
+	make DESTDIR=$PKG install
+
+}
