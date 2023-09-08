@@ -11,27 +11,29 @@ source="https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/$name-$version.tar.
 build() {
 	cd $name-$version
 
-	./configure --prefix=/usr                     \
-	            --sysconfdir=/etc/ssh             \
-		    --libexecdir=/usr/lib/$name       \
-	            --with-md5-passwords              \
-	            --with-privsep-path=/var/lib/sshd \
-		    --without-zlib-version-check
+	./configure --prefix=/usr \
+		--sysconfdir=/etc/ssh \
+		--with-privsep-path=/var/lib/sshd \
+		--with-default-path=/usr/bin \
+		--with-superuser-path=/usr/sbin:/usr/bin \
+		--with-pid-dir=/run \
+		--libexecdir=/usr/lib/$name \
+		--with-md5-passwords \
+		--without-zlib-version-check
 	make
 	make DESTDIR=$PKG install
 
-	install -v -m755    contrib/ssh-copy-id $PKG/usr/bin
-	install -v -m644    contrib/ssh-copy-id.1 \
-	                    $PKG/usr/share/man/man1
+	install -v -m755 contrib/ssh-copy-id $PKG/usr/bin
+	install -v -m644 contrib/ssh-copy-id.1 $PKG/usr/share/man/man1
 
 	sed '/^#ChallengeResponseAuthentication yes$/c ChallengeResponseAuthentication no' \
-	    -i $PKG/etc/ssh/sshd_config
+		-i $PKG/etc/ssh/sshd_config
 
-	install  -dm700 -o root -g sys $PKG/var/lib/sshd
+	install -dm700 -o root -g sys $PKG/var/lib/sshd
 
 	# runit service
-	    install -Dm755 $SRC/run.sshd $PKG/etc/sv/sshd/run
-	    ln -s /run/runit/supervise.sshd $PKG/etc/sv/sshd/supervise
+	install -Dm755 $SRC/run.sshd $PKG/etc/sv/sshd/run
+	ln -s /run/runit/supervise.sshd $PKG/etc/sv/sshd/supervise
 	# rc service
-	    install -Dm755 $SRC/rc.sshd $PKG/etc/rc.d/sshd
+	install -Dm755 $SRC/rc.sshd $PKG/etc/rc.d/sshd
 }

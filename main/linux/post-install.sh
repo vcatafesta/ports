@@ -3,7 +3,7 @@
 kernver=$(cat /lib/modules/KERNELVERSION)
 if [ $(command -v mkinitramfs) ]; then
 	echo "mkinitramfs: generating initramfs for kernel $kernver..."
-	mkinitramfs -q -k $kernver -o /boot/initrd-venom.img
+	mkinitramfs -q -k $kernver -o /boot/initrd-chili.img
 fi
 
 depmod $kernver
@@ -15,12 +15,12 @@ if [ $(command -v dkms) ]; then
 	done
 fi
 
-# removing other venom's kernel
+# removing other chili's kernel
 for i in /lib/modules/*; do
 	[ -d $i ] || continue
 	case ${i##*/} in
 		$kernver) continue;;
-		*-Venom)
+		*-chili)
 			[ -d $i/build/include ] && continue
 			echo "post-install: removing kernel ${i##*/}"
 			rm -fr $i;;

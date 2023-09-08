@@ -1,0 +1,40 @@
+# description	: The systemd package contains programs for controlling the startup, running, and shutdown of the system.
+
+name=systemd
+version=254
+release=1
+source="https://github.com/systemd/systemd/archive/v254/$name-254.tar.gz"
+
+build() {
+	cd $name-$version
+
+	sed -i -e 's/GROUP="render"/GROUP="video"/' \
+       -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
+
+mkdir -p build
+cd       build
+
+meson setup \
+      --prefix=/usr                 \
+      --buildtype=release           \
+      -Ddefault-dnssec=no           \
+      -Dfirstboot=false             \
+      -Dinstall-tests=false         \
+      -Dldconfig=false              \
+      -Dsysusers=false              \
+      -Drpmmacrosdir=no             \
+      -Dhomed=false                 \
+      -Duserdb=false                \
+      -Dman=false                   \
+      -Dmode=release                \
+      -Dpamconfdir=no               \
+      -Ddev-kvm-mode=0660           \
+      -Ddocdir=/usr/share/doc/systemd-254 \
+      ..
+
+	ninja
+	DESTDIR=$PKG ninja install
+	systemd-machine-id-setup
+	systemctl preset-all
+	systemctl disable systemd-sysupdate{,-reboot}
+}

@@ -18,7 +18,7 @@ build() {
 	make olddefconfig
 
 	sed '/^CONFIG_LOCALVERSION=/d' -i .config
-	echo 'CONFIG_LOCALVERSION="-Venom"' >> .config
+	echo 'CONFIG_LOCALVERSION="-chili"' >> .config
 
 
 	kernver=${version}$(grep CONFIG_LOCALVERSION= .config | cut -d '"' -f2)
@@ -30,7 +30,7 @@ build() {
 
 	mkdir -p $PKG/boot
 
-	cp  arch/x86/boot/bzImage $PKG/boot/vmlinuz-venom
+	cp  arch/x86/boot/bzImage $PKG/boot/vmlinuz-chili
 	echo $kernver > $PKG/lib/modules/KERNELVERSION
 
 	make clean
