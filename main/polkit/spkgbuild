@@ -10,10 +10,10 @@ source="https://gitlab.freedesktop.org/polkit/polkit/-/archive/$version/polkit-$
 build() {
 	export XML_CATALOG_FILES=/etc/xml/catalog
 
-  	venom-meson $name-$version build \
+  	chili-meson $name-$version build \
 		-Dsystemdsystemunitdir=/trash \
 		-Dsession_tracking="ConsoleKit" \
-		-Dman=true \
+		-Dman=false \
 		-Dtests=false
 	meson compile -C build
 	DESTDIR=$PKG meson install --no-rebuild -C build
