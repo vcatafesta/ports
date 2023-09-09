@@ -9,16 +9,16 @@ source="https://gitlab.gnome.org/GNOME/gtk/-/archive/$version/gtk-$version.tar.b
 
 build() {
 	export XML_CATALOG_FILES=/etc/xml/catalog
-	
-	venom-meson gtk-$version build \
-		-Dbroadway-backend=true \
-		-Dwayland-backend=$(scratch isinstalled wayland-protocols && echo true || echo false) \
+#		-Dbroadway-backend=true \
+
+	chili-meson gtk-$version build \
+		-Dwayland-backend=true \
 		-D introspection=enabled \
 		-D man-pages=false \
 		-D build-tests=false \
 		-D build-testsuite=false \
 		-D build-examples=false \
 		-D demos=false
-        meson compile -C build
-        DESTDIR=$PKG meson install --no-rebuild -C build
+	meson compile -C build
+	DESTDIR=$PKG meson install --no-rebuild -C build
 }
