@@ -1,0 +1,20 @@
+# description   : The Sharutils package contains utilities that can create 'shell' archives.
+# depends   	:
+
+name=sharutils
+version=4.15.2
+release=1
+source="https://ftp.gnu.org/gnu/sharutils/sharutils-4.15.2.tar.xz"
+
+build() {
+    cd $name-$version
+
+	#Fix a heap buffer overflow, and an issue exposed by GCC-10:
+	sed -i 's/BUFSIZ/rw_base_size/' src/unshar.c &&
+	sed -i '/program_name/s/^/extern /' src/*opts.h
+
+	#Install Sharutils by running the following commands:
+	./configure --prefix=/usr &&
+	make
+    make DESTDIR=$PKG install
+}
