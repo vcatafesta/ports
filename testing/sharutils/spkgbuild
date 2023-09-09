@@ -14,6 +14,9 @@ build() {
 	sed -i '/program_name/s/^/extern /' src/*opts.h
 
 	#Install Sharutils by running the following commands:
+	sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c        &&
+	echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h &&
+
 	./configure --prefix=/usr &&
 	make
     make DESTDIR=$PKG install
