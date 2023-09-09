@@ -1,0 +1,15 @@
+# description	: The bridge-utils package contains a utility needed to create and manage bridge devices.
+
+name=bridge-utils
+version=1.7.1
+release=1
+source="https://www.kernel.org/pub/linux/utils/net/bridge-utils/$name-$version.tar.xz"
+
+build() {
+	cd $name-$version
+
+	autoconf &&
+		./configure --prefix=/usr &&
+		make
+	make DESTDIR=$PKG install
+}
