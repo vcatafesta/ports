@@ -1,0 +1,25 @@
+# description   : JS (also referred as SpiderMonkey) is Mozilla's JavaScript and WebAssembly Engine, written in C++ and Rust. In BLFS, the source code of JS is taken from Firefox.
+# depends   	: icu rust which
+
+name=js
+version=102.13.0
+release=1
+source="https://archive.mozilla.org/pub/firefox/releases/102.13.0esr/source/firefox-102.13.0esr.source.tar.xz"
+
+build() {
+	cd firefox-102.13.0
+	mkdir obj &&
+		cd obj &&
+		sh ../js/src/configure.in --prefix=/usr \
+			--with-intl-api \
+			--with-system-zlib \
+			--with-system-icu \
+			--disable-jemalloc \
+			--disable-debug-symbols \
+			--enable-readline
+	make
+	rm -fv /usr/lib/libmozjs-102.so
+	make DESTDIR=$PKG install
+	rm -v $PKG/usr/lib/libjs_static.ajs &&
+		sed -i '/@NSPR_CFLAGS@/d' $PKG/usr/bin/js102-config
+}
