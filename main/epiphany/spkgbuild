@@ -1,0 +1,22 @@
+# description	: Epiphany is a simple yet powerful GNOME web browser targeted at non-technical users. Its principles are simplicity and standards compliance.
+# depends       : gcr gnome-desktop gnome-keyring iso-codes json-glib libadwaita nettle webkitgtk
+
+name=epiphany
+version=44.6
+release=1
+source="https://download.gnome.org/sources/epiphany/44/epiphany-$version.tar.xz"
+
+build() {
+	cd $name-$version
+
+	mkdir -p build
+	cd build
+
+	meson setup \
+		--prefix=/usr \
+		--buildtype=release \
+		..
+
+	ninja
+	DESTDIR=$PKG ninja install
+}

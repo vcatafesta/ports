@@ -8,11 +8,10 @@ release=2
 source="$name-$version.tar.gz::https://gitlab.gnome.org/GNOME/gtk/-/archive/$version/gtk-$version.tar.gz"
 
 build() {
-
-	venom-meson gtk-$version build \
+#		-Dcolord=true \
+#		-Dwayland_backend=true \
+	chili-meson gtk-$version build \
 		-Dbroadway_backend=true \
-		-Dcolord=$(scratch isinstalled colord && echo yes || echo no) \
-		-Dwayland_backend=$(scratch isinstalled libxkbcommon && scratch isinstalled wayland-protocols && echo true || echo false) \
 		-Dman=false \
 		-Dgtk_doc=false \
 		-Dexamples=false \
@@ -20,6 +19,10 @@ build() {
 		-Dinstalled_tests=false \
 		-Ddemos=false
 	meson compile -C build
+	#If you installed the package on to your system using a “DESTDIR” method, an important file was not installed and must be copied and/or generated.
+	gtk-query-immodules-3.0 --update-cache
+	#If you installed the package to your system using a “DESTDIR” method, /usr/share/glib-2.0/schemas/gschemas.compiled was not updated/created. 
+	glib-compile-schemas /usr/share/glib-2.0/schemas
 	DESTDIR=$PKG meson install --no-rebuild -C build
 
 cat > $PKG/etc/gtk-3.0/settings.ini << "EOF"

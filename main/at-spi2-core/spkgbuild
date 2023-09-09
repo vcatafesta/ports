@@ -7,13 +7,13 @@ release=1
 source="https://ftp.gnome.org/pub/gnome/sources/$name/${version%.*}/$name-$version.tar.xz"
 
 build() {
-	
+
 	# atk and at-spi2-atk dropped, use at-spi2-core instead
 	if scratch isinstalled atk || scratch isinstalled at-spi2-atk; then
-	   echo "atk and at-spi2-atk dropped, please REMOVE both first"
-	   exit 1	
+		echo "atk and at-spi2-atk dropped, please REMOVE both first"
+		exit 1
 	fi
-	
+
 	venom-meson $name-$version build
 	meson compile -C build
 	DESTDIR=$PKG meson install --no-rebuild -C build

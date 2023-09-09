@@ -10,6 +10,8 @@ noextract="cmake-${version}.src.tar.xz"
 
 build() {
 	cd $name-$version.src
+	MAKEFLAGS="-j2"
+
 
 	# The upstream expects it to be extracted at the same level as the llvm tarball, and 
 	# the extracted directory renamed to cmake
