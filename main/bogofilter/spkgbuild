@@ -1,0 +1,14 @@
+# description   : The Bogofilter application is a mail filter that classifies mail as spam or ham (non-spam) by a statistical analysis of the message's header and content (body).
+# depends   	: db
+
+name=bogofilter
+version=1.2.5
+release=1
+source="https://downloads.sourceforge.net/bogofilter/$name-$version.tar.xz"
+
+build() {
+	cd $name-$version
+	./configure --prefix=/usr --sysconfdir=/etc/bogofilter
+    make
+    make DESTDIR=$PKG install
+}
