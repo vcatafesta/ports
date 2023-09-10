@@ -1,0 +1,25 @@
+# description   : The Tripwire package contains programs used to verify the integrity of the files on a given system.
+# depends   	:
+
+name=tripwire
+version=2.4.3.7
+release=1
+source="https://github.com/Tripwire/tripwire-open-source/releases/download/2.4.3.7/tripwire-open-source-2.4.3.7.tar.gz"
+
+build() {
+	cd tripwire-open-source-$version
+
+	sed -e '/^CLOBBER/s/false/true/' \
+		-e 's|TWDB="${prefix}|TWDB="/var|' \
+		-e '/TWMAN/ s|${prefix}|/usr/share|' \
+		-e '/TWDOCS/s|${prefix}/doc/tripwire|/usr/share/doc/tripwire-2.4.3.7|' \
+		-i installer/install.cfg &&
+		find . -name Makefile.am | xargs \
+			sed -i 's/^[[:alpha:]_]*_HEADERS.*=/noinst_HEADERS =/' &&
+		sed '/dist/d' -i man/man?/Makefile.am &&
+		autoreconf -fi &&
+		./configure --prefix=/usr --sysconfdir=/etc/tripwire &&
+		make CPPFLAGS=-std=c++11
+	make DESTDIR=$PKG install
+	cp -v policy/*.txt $PKG/usr/share/doc/tripwire-2.4.3.7
+}
