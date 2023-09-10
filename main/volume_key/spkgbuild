@@ -9,9 +9,12 @@ source="https://releases.pagure.org/volume_key/$name-$version.tar.xz"
 build() {
 	cd $name-$version
 
+	sed -e '/AM_PATH_GPGME/iAM_PATH_GPG_ERROR' \
+		-e 's/gpg2/gpg/' -i configure.ac
+
+	autoreconf -fiv
 	./configure --prefix=/usr \
-	--disable-nls \
-	--with-python3
+		--without-python
 	make
 	make DESTDIR=$PKG install
 	rm -rf $PKG/usr/lib/python2*

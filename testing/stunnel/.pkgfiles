@@ -1,0 +1,19 @@
+stunnel-5.70-1
+drwxr-xr-x root/root    etc/
+drwxr-xr-x root/root    etc/stunnel/
+-rw-r--r-- root/root    etc/stunnel/stunnel.conf-sample
+drwxr-xr-x root/root    usr/
+drwxr-xr-x root/root    usr/bin/
+-rwxr-xr-x root/root    usr/bin/stunnel
+-rwxr-xr-x root/root    usr/bin/stunnel3
+drwxr-xr-x root/root    usr/lib/
+drwxr-xr-x root/root    usr/lib/stunnel/
+-rwxr-xr-x root/root    usr/lib/stunnel/libstunnel.so
+drwxr-xr-x root/root    usr/share/
+drwxr-xr-x root/root    usr/share/man/
+drwxr-xr-x root/root    usr/share/man/man8/
+-rw-r--r-- root/root    usr/share/man/man8/stunnel.8.gz
+-rw-r--r-- root/root    usr/share/man/man8/stunnel.pl.8.gz
+drwxr-xr-x root/root    var/
+drwxr-xr-x root/root    var/lib/
+drwxrwx--T root/nogroup    var/lib/stunnel/
