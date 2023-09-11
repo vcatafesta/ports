@@ -1,10 +1,10 @@
 # Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
 # description   : DSSSL Stylesheets for DocBook
-# depends   	:
+# depends   	: sgml-common perl
 
 name=docbook-dsssl
 version=1.79
-release=1
+release=9
 pkgname=docbook-dsssl
 pkgver=1.79
 pkgrel=9
@@ -13,27 +13,22 @@ arch=('any')
 url="http://docbook.sourceforge.net/"
 license=('custom')
 depends=('sgml-common' 'perl')
-install=${pkgname}.install
-source="https://sourceforge.net/projects/docbook/files/${pkgname}/${pkgver}/${pkgname}-${pkgver}.tar.bz2
-	    https://gitlab.archlinux.org/archlinux/packaging/packages/docbook-dsssl/-/raw/main/docbook-dsssl.install
-	    https://gitlab.archlinux.org/archlinux/packaging/packages/docbook-dsssl/-/raw/main/docbook-style-dsssl.Makefile"
+source="https://downloads.sourceforge.net/docbook/$name-$version.tar.bz2
+		https://downloads.sourceforge.net/docbook/$name-doc-$version.tar.bz2"
 
 prepare() {
 	srcdir=$SRC
 	pkgdir=$PKG
 	cd "${pkgname}-${pkgver}"
-	cp "${srcdir}"/docbook-style-dsssl.Makefile Makefile
+#	tar -xf ../$name-doc-$version.tar.bz2 --strip-components=1
 }
 
 build() {
 	cd "${pkgname}-${pkgver}"
-	# FS#67286 parallel installation might fail
-	make -j1 install \
-		BINDIR="${pkgdir}/usr/bin" \
-		DESTDIR="${pkgdir}/usr/share/sgml/docbook/dsssl-stylesheets-${pkgver}" \
-		MANDIR="${pkgdir}/usr/share/man"
-
-	ln -s dsssl-stylesheets-${pkgver} ${pkgdir}/usr/share/sgml/docbook/dsssl-stylesheets
-	# license
-	install -Dm644 README "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+	mkdir -p $PKG/usr/bin
+	mkdir -p $PKG/usr/share/man/man1
+	install -v -m755 bin/collateindex.pl $PKG/usr/bin
+	install -v -m644 bin/collateindex.pl.1 $PKG/usr/share/man/man1
+	install -v -d -m755 $PKG/usr/share/sgml/docbook/dsssl-stylesheets-1.79
+	cp -v -R * $PKG/usr/share/sgml/docbook/dsssl-stylesheets-1.79
 }
