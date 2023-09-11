@@ -1,0 +1,28 @@
+# Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
+# description   : Text document format for short documents, articles, books and UNIX man pages
+# depends   	:
+
+name=dos2unix
+version=7.5.0
+release=1
+pkgname=dos2unix
+pkgver=7.5.0
+pkgrel=1
+arch=('any')
+pkgdesc="Texto"
+url="https://github.com/vcatafesta/chili-ports"
+license=('GPL')
+depends=('bash' 'jq')
+optdepends=('pamac-snap-plugin' 'pamac-flatpak-plugin')
+source=("https://downloads.sourceforge.net/dos2unix/$pkgname-$pkgver.tar.gz")
+
+prepare() {
+    pkgdir=$PKG
+    srcdir=$SRC
+}
+
+build() {
+    cd $pkgname-$pkgver
+    make
+    make DESTDIR=$PKG install
+}
