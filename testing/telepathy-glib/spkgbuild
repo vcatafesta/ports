@@ -1,0 +1,31 @@
+# description   : Library used by GLib based Telepathy components
+# depends   	: dbus-glib libxslt
+
+name=telepathy-glib
+version=0.24.1
+release=1
+
+pkgname=telepathy-glib
+pkgver=23.09.10
+pkgrel=1
+arch=('any')
+pkgdesc="Texto"
+pkgdir='/'
+url="https://github.com/vcatafesta/chili-ports"
+license=('GPL')
+depends=('bash' 'jq')
+optdepends=('pamac-snap-plugin' 'pamac-flatpak-plugin')
+source="https://telepathy.freedesktop.org/releases/telepathy-glib/telepathy-glib-$version.tar.gz"
+
+build() {
+	cd $name-$version
+
+	sed -i 's%/usr/bin/python%&3%' tests/all-errors-documented.py
+
+	PYTHON=/usr/bin/python3 ./configure --prefix=/usr \
+		--enable-vala-bindings \
+		--disable-static &&
+		make
+	make DESTDIR=$PKG install
+	#   DESTDIR=$PKG ninja install
+}
