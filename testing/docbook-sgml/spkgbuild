@@ -12,16 +12,9 @@ build() {
 	sed -i -e '/ISO 8879/d'\
 	       -e '/gml/d' docbook.cat
 
-	install -v -d $PKG/usr/share/sgml/docbook/sgml-dtd-4.5 &&
-	chown -R root:root . &&
+	install -v -d $PKG/usr/share/sgml/docbook/sgml-dtd-4.5
+	chown -R root:root .
 
-	install -v docbook.cat $PKG/usr/share/sgml/docbook/sgml-dtd-4.5/catalog &&
-	cp -v -af *.dtd *.mod *.dcl $PKG/usr/share/sgml/docbook/sgml-dtd-4.5 &&
-
-	install-catalog --add $PKG/etc/sgml/sgml-docbook-dtd-4.5.cat \
-	    $PKG/usr/share/sgml/docbook/sgml-dtd-4.5/catalog &&
-
-	install-catalog --add $PKG/etc/sgml/sgml-docbook-dtd-4.5.cat \
-	    $PKG/etc/sgml/sgml-docbook.cat
-	return 0
+	install -v docbook.cat $PKG/usr/share/sgml/docbook/sgml-dtd-4.5/catalog
+	cp -v -af *.dtd *.mod *.dcl $PKG/usr/share/sgml/docbook/sgml-dtd-4.5
 }
