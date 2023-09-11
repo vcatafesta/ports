@@ -1,0 +1,21 @@
+# description   : The Umockdev package contains a framework that allows a developer to mock devices for use in unit testing.
+# depends   	: libgudev libpcap vala
+
+name=umockdev
+version=0.17.18
+release=1
+pkgname=umockdev
+pkgver=0.17.18
+pkgrel=1
+source="https://github.com/martinpitt/umockdev/releases/download/$version/$name-$version.tar.xz"
+
+build() {
+	cd $name-$version
+
+	mkdir build
+	cd build
+	meson setup --prefix=/usr --buildtype=release ..
+	ninja
+
+	DESTDIR=$PKG ninja install
+}
