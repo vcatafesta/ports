@@ -1,0 +1,51 @@
+# Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
+# description   : Shell scripts to manage DocBook documents
+# depends   	: openjade docbook-dsssl
+
+name=docbook-utils
+version=0.6.14
+release=12
+pkgname=docbook-utils
+pkgver=0.6.14
+pkgrel=12
+pkgdesc='Shell scripts to manage DocBook documents'
+arch=('any')
+url="https://www.sourceware.org/docbook-tools/"
+license=('GPL2')
+depends=('openjade' 'docbook-dsssl' 'docbook-sgml31')
+makedepends=('perl-sgmls')
+optdepends=('perl-sgmls: for conversion to man and texinfo'
+	'lynx: for conversion to txt'
+	'texlive-htmlxml: for conversion to pdf')
+source="https://sourceware.org/ftp/docbook-tools/new-trials/SOURCES/docbook-utils-0.6.14.tar.gz
+		https://www.linuxfromscratch.org/patches/blfs/12.0/docbook-utils-0.6.14-grep_fix-1.patch"
+
+prepare() {
+	pkgdir=$PKG
+	srcdir=$SRC
+	cd "${pkgname}-${pkgver}"
+	patch -Np1 -i ../docbook-utils-0.6.14-grep_fix-1.patch
+	sed -i 's:/html::' doc/HTML/Makefile.in
+}
+
+build() {
+	cd "${pkgname}-${pkgver}"
+	./configure --prefix=/usr --mandir=/usr/share/man
+	make
+}
+
+package() {
+  cd "${pkgname}-${pkgver}"
+  make install DESTDIR="${pkgdir}" htmldir="/usr/share/doc/${pkgname}/html"
+  make install DESTDIR="${pkgdir}" docdir="/usr/share/doc"
+
+  #common alternative names
+  for doctype in 'html' 'ps' 'dvi' 'man' 'pdf' 'rtf' 'tex' 'texi' 'txt'; do
+    ln -sv "docbook2${doctype}" "${pkgdir}/usr/bin/db2${doctype}"
+    ln -sv "jw.1" "${pkgdir}/usr/share/man/man1/db2${doctype}"
+  done
+
+  # db2html is not just a symlink, as it has to create the output directory - FS#67758
+  rm "${pkgdir}/usr/bin/db2html"
+  install -p -m 755 ../db2html "${pkgdir}/usr/bin/db2html"
+}

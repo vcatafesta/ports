@@ -1,19 +1,45 @@
+# Maintainer	: Vilmar Catafesta <vcatafesta@gmail.com>
 # description	: Creating and maintaining centralized SGML catalogs
 
 name=sgml-common
 version=0.6.3
 release=2
-source="https://sourceware.org/ftp/docbook-tools/new-trials/SOURCES/$name-$version.tgz
-	$name-manpage-1.patch"
+pkgname='sgml-common'
+pkgver=0.6.3
+pkgrel=8
+pkgdesc='Tools for maintaining centralized SGML catalogs.'
+arch=('any')
+url='https://www.docbook.org/xml/'
+license=('GPL')
+install='sgml-common.install'
+depends=('sh')
+source="https://www.sourceware.org/pub/docbook-tools/new-trials/SOURCES/sgml-common-${pkgver}.tgz
+ 	    https://gitlab.archlinux.org/archlinux/packaging/packages/sgml-common/-/raw/main/sgml-common-0.6.3-manpage-1.patch
+ 	    https://gitlab.archlinux.org/archlinux/packaging/packages/sgml-common/-/raw/main/sgml-common.install"
+
+prepare() {
+	pkgdir=$PKG
+	srcdir=$SCR
+	cd sgml-common-${pkgver}
+	patch -Np1 -i ../sgml-common-0.6.3-manpage-1.patch
+}
 
 build() {
-	cd $name-$version
-
-	patch -Np1 -i ../$name-manpage-1.patch
-	autoreconf -f -i
-
+	cd sgml-common-${pkgver}
+	autoreconf -vfi
 	./configure --prefix=/usr --sysconfdir=/etc
 	make
-	make docdir=/usr/share/doc DESTDIR=$PKG install
+}
 
+package() {
+	cd sgml-common-${pkgver}
+	make DESTDIR="$pkgdir" docdir=/usr/share/doc install
+
+	install-catalog --add $PKG/etc/sgml/sgml-ent.cat \
+		$PKG/usr/share/sgml/sgml-iso-entities-8879.1986/catalog
+
+	install-catalog --add $PKG/etc/sgml/sgml-docbook.cat \
+		$PKG/etc/sgml/sgml-ent.cat
+
+	#   "$pkgdir/usr/doc" "$pkgdir/usr/share/doc"
 }
