@@ -1,0 +1,44 @@
+# description	: The DocBook SGML DTD package contains document type definitions for verification of SGML data files against the DocBook rule set.
+# depends	: sgml-common libarchive
+
+name=docbook-sgml31
+version=3.1
+release=1
+noextract="docbk31.zip"
+source="https://www.docbook.org/sgml/3.1/docbk31.zip"
+pkgname=docbook-sgml31
+pkgver=3.1
+pkgrel=5
+pkgdesc="Legacy docbook-sgml"
+arch=('any')
+url='https://www.docbook.org/sgml/'
+license=('MIT')
+depends=('sgml-common')
+install=$pkgname.install
+source=("https://www.docbook.org/sgml/${pkgver}/docbk31.zip")
+
+prepare() {
+	srcdir=$SRC
+	pkgdir=$PKG
+	bsdunzip docbk31.zip
+}
+
+build() {
+  cd "$srcdir"
+  # This command removes the ENT definitions from the catalog file.
+  # This command replaces the DTDDECL catalog entry, which is not supported by Linux SGML tools, 
+  # with the SGMLDECL catalog entry.
+  sed -i -e '/ISO 8879/d' \
+         -e 's|DTDDECL "-//OASIS//DTD DocBook V3.1//EN"|SGMLDECL|g' \
+         docbook.cat
+}
+
+package() {
+  cd "$srcdir"
+
+  local DTDDIR="usr/share/sgml/docbook-sgml-${pkgver}"
+
+  install -dm755 "$pkgdir/$DTDDIR"
+  install -m644 docbook.cat "$pkgdir/$DTDDIR/catalog"
+  install -m644 *.dtd *.mod *.dcl "$pkgdir/$DTDDIR"
+}
