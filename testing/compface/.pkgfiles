@@ -1,0 +1,22 @@
+compface-1.5.2-11
+drwxr-xr-x root/root    usr/
+drwxr-xr-x root/root    usr/bin/
+-rwxr-xr-x root/root    usr/bin/compface
+-rwxr-xr-x root/root    usr/bin/uncompface
+drwxr-xr-x root/root    usr/include/
+-rw-r--r-- root/root    usr/include/compface.h
+drwxr-xr-x root/root    usr/lib/
+lrwxrwxrwx root/root    usr/lib/libcompface.so -> libcompface.so.1
+lrwxrwxrwx root/root    usr/lib/libcompface.so.1 -> libcompface.so.1.0.0
+-rwxr-xr-x root/root    usr/lib/libcompface.so.1.0.0
+drwxr-xr-x root/root    usr/share/
+drwxr-xr-x root/root    usr/share/licenses/
+drwxr-xr-x root/root    usr/share/licenses/compface/
+-rw-r--r-- root/root    usr/share/licenses/compface/LICENSE
+drwxr-xr-x root/root    usr/share/man/
+drwxr-xr-x root/root    usr/share/man/man1/
+-rw-r--r-- root/root    usr/share/man/man1/compface.1.gz
+lrwxrwxrwx root/root    usr/share/man/man1/uncompface.1.gz -> compface.1.gz
+drwxr-xr-x root/root    usr/share/man/man3/
+-rw-r--r-- root/root    usr/share/man/man3/compface.3.gz
+lrwxrwxrwx root/root    usr/share/man/man3/uncompface.3.gz -> compface.3.gz

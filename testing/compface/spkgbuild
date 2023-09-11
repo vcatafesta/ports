@@ -1,0 +1,38 @@
+# Maintainer	: Vilmar Catafesta  <vcatafesta@gmail.com>
+# description   : Text document format for short documents, articles, books and UNIX man pages
+# depends   	:
+
+name=compface
+version=1.5.2
+release=11
+pkgname=compface
+pkgver=1.5.2
+pkgrel=11
+pkgdesc="Utils & libs to convert from/to X-Face format."
+arch=('x86_64')
+url="http://ftp.xemacs.org/pub/xemacs/aux/"
+license=('custom')
+depends=('glibc')
+source="http://mirrors.ibiblio.org/xemacs/aux/$pkgname-$pkgver.tar.gz
+		https://gitlab.archlinux.org/archlinux/packaging/packages/compface/-/raw/main/compface-1.5.2-build.patch
+		https://gitlab.archlinux.org/archlinux/packaging/packages/compface/-/blob/main/LICENSE"
+
+prepare() {
+	pkgdir=$PKG
+	srcdir=$SRC
+	cd $pkgname-$pkgver
+	patch -Np0 -i ${srcdir}/compface-1.5.2-build.patch
+}
+
+build() {
+	cd $pkgname-$pkgver
+	CFLAGS="$CFLAGS -fPIC"
+	./configure --prefix=/usr --mandir=/usr/share/man
+	make
+}
+
+package() {
+	cd $pkgname-$pkgver
+	make DESTDIR="$pkgdir" STRIP=/bin/true install
+	install -D -m644 ../LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
+}
