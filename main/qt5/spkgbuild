@@ -17,10 +17,10 @@ build() {
 
 	# Build qmake using Venom {C,LD}FLAGS
 	# This also sets default {C,CXX,LD}FLAGS for projects built using qmake
-	sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
-		qtbase/mkspecs/common/gcc-base.conf
-	sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
-		qtbase/mkspecs/common/g++-unix.conf
+#	sed -i -e "s|^\(QMAKE_CFLAGS_RELEASE.*\)|\1 ${CFLAGS}|" \
+#		qtbase/mkspecs/common/gcc-base.conf
+#	sed -i -e "s|^\(QMAKE_LFLAGS_RELEASE.*\)|\1 ${LDFLAGS}|" \
+#		qtbase/mkspecs/common/g++-unix.conf
 
 	# Add another fix for building with GCC-13:
 
