@@ -1,4 +1,5 @@
-# description	: A parser generator
+# description	: The GNU general-purpose parser generator
+# depends		: glibc m4 sh gettext
 
 name=bison
 version=3.8.2
