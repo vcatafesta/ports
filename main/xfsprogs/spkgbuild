@@ -1,27 +1,40 @@
-# description	: Administration and debugging tools for the XFS file system
-# depends	: util-linux readline inih urcu
+# Maintainer	: Vilmar Catafesta <vcatafesta@gmail.com>
+# description	: XFS filesystem utilities
+# depends		: sh util-linux-libs device-mapper inih urcu
 
-name=xfsprogs
-version=6.4.0
-release=1
-source="https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/$name-$version.tar.xz"
+pkgname=xfsprogs
+pkgver=6.4.0
+pkgrel=1
+pkgdesc="XFS filesystem utilities"
+arch=('x86_64')
+license=('LGPL')
+url="https://xfs.wiki.kernel.org"
+depends=('sh' 'util-linux-libs' 'device-mapper' 'libinih' 'liburcu')
+optdepends=('icu: for xfs_scrub' 'python: for xfs_scrub_all script' 'smtp-forwarder: for xfs_scrub_fail script')
+makedepends=('git' 'icu')
+options=('!makeflags')
+source="https://www.kernel.org/pub/linux/utils/fs/xfs/xfsprogs/$pkgname-$pkgver.tar.xz"
+
+prepare() {
+	pkgdir=$PKG
+	srcdir=$SRC
+}
 
 build() {
-	cd $name-$version
+	cd ${pkgname}-${pkgver}
 	make configure
-
-	export DEBUG=-DNDEBUG
 	export OPTIMIZER=$CFLAGS
-
-	./configure --prefix=/usr \
-		    --enable-readline \
-		    --disable-libicu
+	export DEBUG=-DNDEBUG
+	./configure --prefix=/usr --sbindir=/usr/bin --with-systemd-unit-dir=/usr/lib/systemd/system
 	make
-	make -j1 DIST_ROOT=$PKG install install-dev
+}
 
-	rm $PKG/lib/libhandle.a $PKG/lib/libhandle.so
-	ln -sf ../../lib/libhandle.so.1 $PKG/usr/lib/libhandle.so
-
-	rm -r $PKG/usr/lib/xfsprogs
-
+package() {
+	cd ${pkgname}-${pkgver}
+	make DIST_ROOT="${pkgdir}" PKG_ROOT_SBIN_DIR="/usr/bin" install install
+	chown -R root "$pkgdir"
+	chgrp -R root "$pkgdir"
+	# add hack as we cannot set rootlibdir
+	mv "${pkgdir}"/lib/libhandle.so* "${pkgdir}/usr/lib/"
+	rm -rf "${pkgdir}/lib"
 }
