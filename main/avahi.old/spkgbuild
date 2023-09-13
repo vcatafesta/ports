@@ -1,6 +1,6 @@
 # description	: A system which facilitates service discovery on a local network via the mDNS/DNS-SD protocol suite
-# homepage	: https://www.avahi.org/
-# depends	: dbus gobject-introspection intltool libdaemon libevent
+# homepage		: https://www.avahi.org/
+# depends		: dbus gobject-introspection intltool libdaemon libevent
 
 name=avahi
 version=0.8

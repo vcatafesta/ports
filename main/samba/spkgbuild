@@ -9,31 +9,32 @@ source="https://www.samba.org/ftp/samba/stable/$name-$version.tar.gz"
 build() {
 	cd $name-$version
 	./configure \
-	    --prefix=/usr \
-	    --sysconfdir=/etc \
-	    --libexecdir=/usr/lib/samba \
-	    --localstatedir=/var \
-	    --with-piddir=/run/samba \
-	    --with-pammodulesdir=/lib/security \
-	    --enable-fhs \
-            --without-json \
-	    --without-systemd \
-	    --without-ad-dc \
-	    --without-ads \
-	    --without-ldap 
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--libexecdir=/usr/lib/samba \
+		--localstatedir=/var \
+		--with-piddir=/run/samba \
+		--with-pammodulesdir=/lib/security \
+		--enable-fhs \
+		--without-ad-dc
 	make
+}
+
+package() {
+	cd $name-$version
+	sed '1s@^.*$@#!/usr/bin/python3@' -i ./bin/default/source4/scripting/bin/samba-gpupdate.inst
 	make DESTDIR=$PKG install
-
-	install -d $PKG/lib
-	mv -v $PKG/usr/lib/libnss_wins.so*   $PKG/lib
-	mv -v $PKG/usr/lib/libnss_winbind.so*   $PKG/lib
-	ln -v -sf ../../lib/libnss_winbind.so.2 $PKG/usr/lib/libnss_winbind.so
-	ln -v -sf ../../lib/libnss_wins.so.2    $PKG/usr/lib/libnss_wins.so
-
 	install -v -m644 examples/smb.conf.default $PKG/etc/samba
-
-	# revdep exclude
-	mkdir -p $PKG/etc/revdep.d
-	echo "/usr/lib/samba/" > $PKG/etc/revdep.d/samba.conf
-	echo "/usr/lib/python3.9/site-packages/samba/" >> $PKG/etc/revdep.d/samba.conf
+	sed -e "s;log file =.*;log file = /var/log/samba/%m.log;" \
+		-e "s;path = /usr/spool/samba;path = /var/spool/samba;" \
+		-i $PKG/etc/samba/smb.conf.default
+	mkdir -pv $PKG/etc/openldap/schema
+	install -v -m644    examples/LDAP/README \
+    	                $PKG/etc/openldap/schema/README.samba
+	install -v -m644    examples/LDAP/samba* \
+    	                $PKG/etc/openldap/schema
+	install -v -m755    examples/LDAP/{get*,ol*} \
+    	                $PKG/etc/openldap/schema
+	install -dvm 755 $PKG/usr/lib/cups/backend
+	ln -v -sf $PKG/usr/bin/smbspool $PKG/usr/lib/cups/backend/smb
 }

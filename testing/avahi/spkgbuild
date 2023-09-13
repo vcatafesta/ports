@@ -1,0 +1,62 @@
+# Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
+# description   : Service Discovery for Linux using mDNS/DNS-SD (compatible with Bonjour)
+# depends   	: glib
+
+name=avahi
+version=0.8
+release=1
+pkgname=avahi
+pkgver=0.8
+pkgrel=1
+arch=('any')
+pkgdesc="Service Discovery for Linux using mDNS/DNS-SD (compatible with Bonjour)"
+url="https://github.com/lathiat/avahi"
+license=(LGPL)
+arch=(x86_64)
+depends=(dbus expat gdbm glib2 libcap libdaemon)
+makedepends=(doxygen git gobject-introspection graphviz gtk3 libevent python-dbus python-gobject qt5-base xmltoman)
+license=('GPL')
+depends=('bash' 'jq')
+optdepends=('pamac-snap-plugin' 'pamac-flatpak-plugin')
+source="https://github.com/lathiat/avahi/releases/download/v0.8/avahi-0.8.tar.gz
+		https://www.linuxfromscratch.org/patches/blfs/12.0/avahi-0.8-ipv6_race_condition_fix-1.patch"
+
+prepare() {
+	pkgdir=$PKG
+	srcdir=$SRC
+	cd $pkgname-$pkgver
+	#Fix a regression that results in a race condition when IPv6 is in use and multiple network adapters are present on the system:
+	patch -Np1 -i ../avahi-0.8-ipv6_race_condition_fix-1.patch
+
+	#Fix a security vulnerability in avahi-daemon:
+	sed -i '426a if (events & AVAHI_WATCH_HUP) { \
+client_free(c); \
+return; \
+}' avahi-daemon/simple-protocol.c
+
+}
+
+build() {
+	cd $pkgname-$pkgver
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--localstatedir=/var \
+		--disable-static \
+		--disable-libevent \
+		--disable-mono \
+		--disable-monodoc \
+		--disable-python \
+		--disable-qt3 \
+		--disable-qt4 \
+		--enable-core-docs \
+		--with-distro=none \
+		--with-dbus-system-address='unix:path=/run/dbus/system_bus_socket' &&
+		make
+}
+
+package() {
+	cd $pkgname-$pkgver
+	make DESTDIR=$PKG install
+	#   DESTDIR=$PKG ninja install
+}
