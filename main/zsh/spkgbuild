@@ -3,7 +3,7 @@
 
 name=zsh
 version=5.9
-release=1
+release=4
 source="http://www.zsh.org/pub/$name-$version.tar.xz"
 
 build() {
