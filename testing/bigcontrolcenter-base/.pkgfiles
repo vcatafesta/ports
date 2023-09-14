@@ -1,0 +1,15 @@
+bigcontrolcenter-base-23.09.14-1
+drwxr-xr-x root/root    usr/
+drwxr-xr-x root/root    usr/bin/
+lrwxrwxrwx root/root    usr/bin/locale-config -> locale_config
+-rwxr-xr-x root/root    usr/bin/locale_config
+drwxr-xr-x root/root    usr/share/
+drwxr-xr-x root/root    usr/share/bigbashview/
+drwxr-xr-x root/root    usr/share/bigbashview/bcc/
+drwxr-xr-x root/root    usr/share/bigbashview/bcc/shell/
+-rwxr-xr-x root/root    usr/share/bigbashview/bcc/shell/bcclib.sh
+-rwxr-xr-x root/root    usr/share/bigbashview/bcc/shell/bcfglib.sh
+-rwxr-xr-x root/root    usr/share/bigbashview/bcc/shell/bmgrlib.sh
+-rwxr-xr-x root/root    usr/share/bigbashview/bcc/shell/bstrlib.sh
+-rwxr-xr-x root/root    usr/share/bigbashview/bcc/shell/getbgcolor.sh
+-rwxr-xr-x root/root    usr/share/bigbashview/bcc/shell/setbgcolor.sh
