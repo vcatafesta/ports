@@ -1,0 +1,52 @@
+# Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
+# description   : Text document format for short documents, articles, books and UNIX man pages
+# depends   	:
+
+name=libmilter
+version=8.17.2
+release=1
+_pkgname=sendmail # libmilter is bundled with the sendmail source
+pkgname=libmilter
+pkgver=8.17.2
+pkgrel=1
+pkgdesc='Implementation of the sendmail Mail Filter API'
+url='https://www.proofpoint.com/us/sendmail-open-source'
+arch=('x86_64')
+options=('staticlibs')
+license=('custom:Sendmail')
+# Signing keys sourced from upstream. Current version is signed with the 2021 keys.
+# https://www.proofpoint.com/us/products/email-protection/open-source-email-solution
+validpgpkeys=('81864A0375F2781064FE8E4DCFF9F96740ED9550')
+source="https://ftp.sendmail.org/$_pkgname.$pkgver.tar.gz
+https://gitlab.archlinux.org/archlinux/packaging/packages/libmilter/-/raw/main/fd-passing-libmilter.patch
+https://gitlab.archlinux.org/archlinux/packaging/packages/libmilter/-/raw/main/site.config.m4"
+b2sums=('16a3bfa1d8d1250b6eb42398a53db7505e79f20638e9d949796a3e165cb0c3d8da301293504d9448fbc46549251e6ef431221d9a5fd8babb0caf44da78fbef6c'
+        'SKIP'
+        'ea2f1811666ce1b2c7532794845de9ec1f1e72d6c58a02c4c5800e93359c1c1cd4a0353fee572c258c378b0fea776d03ba19d794da7ed3295d9432b47ceb2481'
+        '4173a1abd272908faeef7f44b5d033f639101f0494be0bcb7e43e29b087f436f082e05a3065fc89f428b91e94cfa0c4b4abf92be77bd722a646012a1f428300a')
+
+prepare() {
+  cd "$_pkgname-$pkgver"
+  patch -p1 -i ../fd-passing-libmilter.patch # FS#49421
+  cp ../site.config.m4 devtools/Site
+}
+
+build() {
+  cd "$_pkgname-$pkgver/$pkgname"
+  ./Build
+}
+
+package() {
+  cd "$_pkgname-$pkgver/$pkgname"
+
+  # create install directory
+  install -vd "$pkgdir/usr/lib"
+  ./Build DESTDIR="$pkgdir" install
+
+  # license
+  install -vDm644 -t "$pkgdir/usr/share/licenses/$pkgname" ../LICENSE
+
+  # correct permissions
+  chown -R root:root "$pkgdir"
+}
+

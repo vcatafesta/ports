@@ -1,0 +1,10 @@
+e04a7a2a3456facba0b86dcec0ef4865  exim-4.96.tar.bz2
+11b319ba0bd84911fa70e9bef2190715  exim-submission.socket
+88cf76405367a6ed371d05db1d3c9565  exim-submission@.service
+c17a96334fde584d5687dd544f0b85b5  exim.Makefile
+e18a535218718c5eb394ed5c9296fe06  exim.logrotate
+6644f30646c7710f7941b31a3974ad34  exim.service
+101a726e4d3f4d0074710273f9808022  exim.socket
+692f1a702383628b584414f1164831d5  exim.sysusers
+50f4f1097ee52db75b7737d90eed8bad  exim.tmpfiles
+6f5a5c2b0835b33f59d2513cce18c65b  exim@.service

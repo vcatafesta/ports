@@ -1,0 +1,46 @@
+# Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
+# description   : AT and batch delayed command scheduling utility and daemon
+# depends   	: smtp-forwarder git systemd
+
+name=at
+version=3.2.5
+release=2
+pkgname=at
+pkgver=3.2.5
+pkgrel=2
+pkgdesc='AT and batch delayed command scheduling utility and daemon'
+arch=('x86_64')
+url='https://salsa.debian.org/debian/at'
+license=('GPL')
+depends=('pam' 'flex')
+makedepends=('smtp-forwarder' 'git' 'systemd')
+source="http://software.calhariz.com/$pkgname/${pkgname}_${pkgver}.orig.tar.gz
+		https://gitlab.archlinux.org/archlinux/packaging/packages/at/-/raw/main/80-atd.hook
+		https://gitlab.archlinux.org/archlinux/packaging/packages/at/-/raw/main/pam.conf"
+
+prepare() {
+	pkgdir=${PKG}
+	srcdir=${SRC}
+	cd ${pkgname}-${pkgver}
+}
+
+build() {
+	cd "$pkgname-$pkgver"
+
+	./configure \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--with-jobdir=/var/spool/atd \
+		--with-atspool=/var/spool/atd \
+		--with-systemdsystemunitdir=/usr/lib/systemd/system
+
+	CFLAGS="$CFLAGS -w" make
+}
+
+package() {
+	make -C "$pkgname-$pkgver" IROOT="$pkgdir" docdir=/usr/share/doc install
+	install -D -m0644 pam.conf "$pkgdir"/etc/pam.d/atd
+	install -D -m0644 80-atd.hook "$pkgdir"/usr/share/libalpm/hooks/80-atd.hook
+}
+
+# vim:set ts=2 sw=2 et:

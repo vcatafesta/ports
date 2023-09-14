@@ -1,0 +1,80 @@
+# Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
+# description   : Message Transfer Agent
+# depends   	: gdbm ldap idn idn2 nsl spf2 xcrypt openssl pam pcre2 sqlite
+
+name=exim
+version=4.96
+release=2
+pkgname=exim
+pkgver=4.96
+pkgrel=2
+pkgdesc='Message Transfer Agent'
+arch=('x86_64')
+url='https://www.exim.org/'
+license=('GPL')
+backup=('etc/mail/aliases' 'etc/mail/exim.conf' 'etc/logrotate.d/exim')
+depends=('gdbm' 'libldap' 'libidn' 'libidn2' 'libnsl' 'libspf2' 'libxcrypt' 'openssl' 'pam' 'pcre2' 'sqlite')
+provides=('smtp-server' 'smtp-forwarder')
+conflicts=('smtp-server' 'smtp-forwarder')
+path_source="https://gitlab.archlinux.org/archlinux/packaging/packages/exim/-/raw/main"
+source="https://ftp.exim.org/pub/exim/exim4/exim-$pkgver.tar.bz2
+        $path_source/exim.logrotate
+        $path_source/exim.Makefile
+        $path_source/exim-submission@.service
+        $path_source/exim.service
+        $path_source/exim@.service
+        $path_source/exim.socket
+        $path_source/exim-submission.socket
+        $path_source/exim.sysusers
+        $path_source/exim.tmpfiles"
+
+build() {
+  cd $pkgname-$pkgver
+
+  cp ../$pkgname.Makefile Local/Makefile
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver
+
+  install -Dm0644 ../exim.logrotate "$pkgdir"/etc/logrotate.d/exim
+  install -Dm0644 doc/exim.8 "$pkgdir"/usr/share/man/man8/exim.8
+
+  install -Dm0644 ../exim.sysusers "$pkgdir"/usr/lib/sysusers.d/exim.conf
+  install -Dm0644 ../exim.tmpfiles "$pkgdir"/usr/lib/tmpfiles.d/exim.conf
+
+  cd build-Linux-*
+  for i in exicyclog exim_checkaccess exim_dumpdb exim_lock exim_tidydb \
+    exipick exiqsumm exigrep exim_dbmbuild exim exim_fixdb eximstats exinext \
+    exiqgrep exiwhat; do
+    install -Dm0755 "$i" "$pkgdir"/usr/bin/$i
+  done
+  chmod u+s "$pkgdir"/usr/bin/exim
+
+  cd ../src
+  sed -e "s|/etc/aliases|/etc/mail/aliases|g" \
+    -e "s|SYSTEM_ALIASES_FILE|/etc/mail/aliases|g" \
+    configure.default | install -Dm0644 /dev/stdin "$pkgdir"/etc/mail/exim.conf
+
+  install -Dm0644 "$srcdir"/aliases "$pkgdir"/etc/mail/aliases
+
+  cd "$pkgdir"/usr/bin
+  for i in mailq newaliases rmail rsmtp runq sendmail; do
+    ln -s exim "$i"
+  done
+
+  # fhs compliancy
+  ln -s ../bin/exim ../lib/sendmail
+
+  install -Dm0644 "$srcdir"/exim-submission@.service \
+    "$pkgdir"/usr/lib/systemd/system/exim-submission@.service
+  install -Dm0644 "$srcdir"/exim.service \
+    "$pkgdir"/usr/lib/systemd/system/exim.service
+  install -Dm0644 "$srcdir"/exim@.service \
+    "$pkgdir"/usr/lib/systemd/system/exim@.service
+  install -Dm0644 "$srcdir"/exim.socket \
+    "$pkgdir"/usr/lib/systemd/system/exim.socket
+  install -Dm0644 "$srcdir"/exim-submission.socket \
+    "$pkgdir"/usr/lib/systemd/system/exim-submission.socket
+}
