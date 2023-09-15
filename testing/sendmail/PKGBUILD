@@ -15,20 +15,18 @@ license=('custom:sendmail')
 _pkgversplit=( ${pkgver//./ } )
 provides=("sendmail=${_pkgversplit[0]}.${_pkgversplit[1]}" 'smtp-server' 'smtp-forwarder')
 conflicts=('msmtp-mta' 'postfix' 'exim' 'opensmtpd')
-backup=('etc/conf.d/sendmail'
-        'etc/mail/aliases'
-        'etc/mail/sendmail.cf'
-        'etc/sasl2/Sendmail.conf')
-source=("https://ftp.sendmail.org/${pkgname}.${pkgver}.tar.gz"
-        'site.config.m4'
-        'sendmail-8.17.1-sasl2-in-etc.patch'
-        'sendmail.conf'
-        'sasl2.conf'
-        'sendmail.sysusers'
-        'sendmail.tmpfiles'
-        'sendmail.service'
-        'sm-client.service')
 depends=('db' 'cyrus-sasl')
+backup=('etc/conf.d/sendmail' 'etc/mail/aliases' 'etc/mail/sendmail.cf' 'etc/sasl2/Sendmail.conf')
+source="https://ftp.sendmail.org/${pkgname}.${pkgver}.tar.gz
+sasl2.conf
+sendmail-8.17.1-sasl2-in-etc.patch
+sendmail.conf
+sendmail.service
+sendmail.sysusers
+sendmail.tmpfiles
+site.config.m4
+sm-client.service"
+
 sha256sums=('90f5ae74c35a84808861933ba094201b901b70c6b2903684dcf39bdae8a5a1a2'
             'c71683c251630352c7328dc4e842a6622734310795616333667d1c4d5de38106'
             '5817c00908ddd1512e4edc48e42646a728f0940271781272372cb11b7be9d039'
@@ -49,7 +47,7 @@ prepare() {
 
 build() {
     cd "${srcdir}/${pkgname}-${pkgver}"
-    ./Build
+    ./Build -DHASFLOCK
     GROFF_NO_SGR=1 make -C doc/op op.txt op.ps
 }
 
