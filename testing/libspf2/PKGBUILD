@@ -1,6 +1,6 @@
 # Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
 # description   : Sender Policy Framework record checking library
-# depends   	: glibc nsl
+# depends       : glibc nsl
 
 name=libspf2
 version=1.2.11
@@ -13,30 +13,26 @@ arch=('x86_64')
 url="https://www.libspf2.org/"
 license=('LGPL')
 depends=('glibc' 'libnsl')
-#makedepends=('libmilter' 'git')
+makedepends=('libmilter' 'git')
 source=("$pkgname::git+https://github.com/shevek/libspf2#commit=8131fe140704eaae695e76b5cd09e39bd1dd220b")
 sha512sums=('SKIP')
 
-prepare() {
-	pkgdir=$PKG
-	pkgsrc=$SRC
-}
-
 build() {
-	cd "$pkgname"
-	./configure --prefix='/usr'
-	make
+  cd "$pkgname"
+  ./configure --prefix='/usr'
+  make
 }
 
 check() {
-	cd "$pkgname"
-	make check
+  cd "$pkgname"
+  make check
 }
 
 package() {
-	cd "$pkgname"
-	make DESTDIR="$pkgdir" install
+  cd "$pkgname"
+  make DESTDIR="$pkgdir" install
 
-	# remove unused binaries
-	rm -v "${pkgdir}"/usr/bin/*_static "${pkgdir}/usr/bin/spfd" "${pkgdir}/usr/bin/spf_example" "${pkgdir}/usr/bin/spftest"
+  # remove unused binaries
+  rm -v "${pkgdir}"/usr/bin/*_static "${pkgdir}/usr/bin/spfd" "${pkgdir}/usr/bin/spf_example" "${pkgdir}/usr/bin/spftest"
 }
+
