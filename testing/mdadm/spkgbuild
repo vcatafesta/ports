@@ -1,0 +1,28 @@
+# Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
+# description   : The mdadm package contains administration tools for software RAID.
+# depends   	:
+
+name=mdadm
+version=4.2
+release=1
+pkgname=mdadm
+pkgver=4.2
+pkgrel=1
+source="https://www.kernel.org/pub/linux/utils/raid/mdadm/mdadm-4.2.tar.xz"
+
+prepare() {
+	pkgdir=${PKG}
+	srcdir=${SRC}
+}
+
+build() {
+	cd ${pkgname}-${pkgver}
+	make
+}
+
+package() {
+	cd ${pkgname}-${pkgver}
+
+	make BINDIR=/usr/sbin DESTDIR=$PKG install
+	#DESTDIR= ninja install
+}

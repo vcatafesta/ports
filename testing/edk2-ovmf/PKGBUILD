@@ -1,13 +1,11 @@
-# Maintainer    : Vilmar Catafesta <vcatafesta@gmail.com>
-# description   : Text document format for short documents, articles, books and UNIX man pages
-# depends       :
+# maintainer  	: Vilmar Catafesta <vcatafesta@gmail.com>
+# description	: Modern, feature-rich firmware development environment for the UEFI specifications
+# depends		:
 
-name=edk2-ovmf
-version=1.0.9
-release=2
 _brotli_ver=1.0.9
 _openssl_ver=3.0.9
-pkgbase=edk2
+name=edk2-ovmf
+pkgbase=edk2-ovmf
 pkgname=(edk2-arm edk2-aarch64 edk2-shell edk2-ovmf)
 pkgver=202308
 _commit=819cfc6b42a68790a23509e4fcc58ceb70e1965e  # refs/tags/edk2-stable202308
