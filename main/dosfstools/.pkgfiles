@@ -1,16 +1,16 @@
-dosfstools-4.2-1
-drwxr-xr-x root/root    sbin/
-lrwxrwxrwx root/root    sbin/dosfsck -> fsck.fat
-lrwxrwxrwx root/root    sbin/dosfslabel -> fatlabel
--rwxr-xr-x root/root    sbin/fatlabel
--rwxr-xr-x root/root    sbin/fsck.fat
-lrwxrwxrwx root/root    sbin/fsck.msdos -> fsck.fat
-lrwxrwxrwx root/root    sbin/fsck.vfat -> fsck.fat
-lrwxrwxrwx root/root    sbin/mkdosfs -> mkfs.fat
--rwxr-xr-x root/root    sbin/mkfs.fat
-lrwxrwxrwx root/root    sbin/mkfs.msdos -> mkfs.fat
-lrwxrwxrwx root/root    sbin/mkfs.vfat -> mkfs.fat
+dosfstools-4.2-3
 drwxr-xr-x root/root    usr/
+drwxr-xr-x root/root    usr/bin/
+lrwxrwxrwx root/root    usr/bin/dosfsck -> fsck.fat
+lrwxrwxrwx root/root    usr/bin/dosfslabel -> fatlabel
+-rwxr-xr-x root/root    usr/bin/fatlabel
+-rwxr-xr-x root/root    usr/bin/fsck.fat
+lrwxrwxrwx root/root    usr/bin/fsck.msdos -> fsck.fat
+lrwxrwxrwx root/root    usr/bin/fsck.vfat -> fsck.fat
+lrwxrwxrwx root/root    usr/bin/mkdosfs -> mkfs.fat
+-rwxr-xr-x root/root    usr/bin/mkfs.fat
+lrwxrwxrwx root/root    usr/bin/mkfs.msdos -> mkfs.fat
+lrwxrwxrwx root/root    usr/bin/mkfs.vfat -> mkfs.fat
 drwxr-xr-x root/root    usr/share/
 drwxr-xr-x root/root    usr/share/man/
 drwxr-xr-x root/root    usr/share/man/man8/
